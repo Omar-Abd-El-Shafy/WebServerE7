@@ -35,12 +35,27 @@ app.get('/api/courses/', (req, res) => {
     res.send(courses)
   });
 //deleteing
-app.delete('/api/courses/', function(req, res){
-    i = courses.findIndex(course => course.id == req.body.id)
-    courses.splice(i,1)
-    res.json({"courses":courses})
-    
+
+// Deleting a course
+app.delete('/api/courses/:id', (req, res) => {
+    // Look up the course 
+    // If not existing, return 404
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) // error 404 object not found
+    {
+        res.status(404).send('THe course with the given id was not found.');
+        return;
+    }
+
+    // Delete
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+
+    // Return the same course
+    res.send(course);
 });
+
+
 //update a course
 app.put('/api/courses/', function(req, res){
     i = courses.findIndex(course => course.id == req.body.id)
@@ -58,18 +73,6 @@ app.post('/api/courses/', function(req, res){
 });
 
 
-//app.post('/create/', (req, res) => {
-  //  return res.redirect('./courses.ejs');
-    // create a new course object
-
-//});
-
-//get all courses
-
-app.get('/api/courses/', (req, res) => {
-  res.send(courses)
-});
-
 //get certain course
 app.get('/api/courses/:id',(req, res)=>{
     const course = courses.find(c => c.id === parseInt(req.params.id));
@@ -80,16 +83,37 @@ app.get('/api/courses/:id',(req, res)=>{
 
 
 app.get('/',(req, res)=>{
-    res.send ('hello world');
+    res.send ('welcome to lms');
 
 });
 
-app.get('/api/courses',(req, res) => {
-    res.send([1, 2, 3]);
-}
-);
 
+//students part
 
+app.get('/api/students/', function (req, res) {
+    res.json({"students":students})
+  })
+
+app.post('/api/students/', function(req, res){
+    new_student = req.body
+    new_course['id'] = courses.length + 1
+    students.push(new_student)
+    res.setHeader('Content-Type', 'application/json');
+    res.json({"students":students})
+});
+
+app.delete('/api/students/', function(req, res){
+    i = students.findIndex(student => student.id == req.body.id)
+    students.splice(i,1)
+    res.json({"students":students})
+    
+});
+
+app.put('/api/students/', function(req, res){
+    i = students.findIndex(student => student.id == req.body.id)
+    students[i] = req.body
+    res.json({"students":students})
+});
 
 
 const port = process.env.PORT || 3000;
