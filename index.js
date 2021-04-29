@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({
 
 
 let courses = [
-{  name: 'course', code:'123abc', description:'Ai intellegince', id:1},
+{  name: 'course', code:'abc123', description:'Ai intellegince', id:1},
 { name: 'multimedia', code:'def456', description:'computer graphics',id:2}
 ];
 
